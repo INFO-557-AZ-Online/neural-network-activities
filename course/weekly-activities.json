@@ -1,0 +1,134 @@
+{
+  "course": "INFO 557 · Neural Networks · 7.5 weeks",
+  "pages_url": "https://info-557-az-online.github.io/neural-network-activities/",
+  "practice_note": "Optional and ungraded. Choose one activity for about 10 minutes within your existing practice time. Stop after the stated check if it answers your question; you do not need to finish every stage or earn a completion badge. No upload, screenshot, extra model run or D2L submission is required. D2L remains authoritative for graded work.",
+  "weeks": [
+    {
+      "week": 1,
+      "title": "Foundations and prediction",
+      "intro": "Choose one activity to connect a weighted sum or output choice with this week’s prediction notebook.",
+      "activities": [
+        {
+          "id": "0.0",
+          "title": "Neuron Explorer",
+          "focus": "Trace a weighted sum and ReLU. Change one weight and explain its effect on the output.",
+          "transfer": "Connect the result to one forward pass in the HAR notebook."
+        },
+        {
+          "id": "6.2.3",
+          "title": "Sigmoid vs Softmax",
+          "focus": "Compare independent outputs with mutually exclusive classes. Explain why HAR uses a competing class distribution.",
+          "transfer": "Use the comparison to explain your output-layer choice; this is practice, not a D2L quiz."
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "title": "Backpropagation and optimization",
+      "intro": "Choose one activity before checking your implementation or training update.",
+      "activities": [
+        {
+          "id": "6.5.2",
+          "title": "Backprop Table",
+          "focus": "Follow one chain of local derivatives and explain the sign of the input gradient.",
+          "transfer": "Compare the reasoning with your Assignment 1 finite-difference check."
+        },
+        {
+          "id": "8.3",
+          "title": "Momentum SGD",
+          "focus": "Compare one supplied SGD update with a momentum update. Explain what the velocity remembers.",
+          "transfer": "The supplied gradients illustrate update arithmetic; they are not a benchmark of optimizer quality."
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "title": "Regularization and validation",
+      "intro": "Choose one activity to explain your existing baseline/regularization comparison.",
+      "activities": [
+        {
+          "id": "7.1",
+          "title": "Regularization Race",
+          "focus": "Compare the effect of L1 and L2 on one weight and its update.",
+          "transfer": "Connect one change to the regularization mechanism in Assignment 2; do not add a new required model run."
+        },
+        {
+          "id": "7.8",
+          "title": "Early Stopping",
+          "focus": "Move the stopping epoch and distinguish choosing a checkpoint from fitting its parameters.",
+          "transfer": "The 1,000-example split is a toy exercise. Keep the course’s fixed participant-separated HAR split; do not re-split it."
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "title": "Convolutional networks",
+      "intro": "Choose one activity to explain a convolution or a pooling output shape.",
+      "activities": [
+        {
+          "id": "9.1",
+          "title": "Convolution",
+          "focus": "Work through one filter position and predict the next output.",
+          "transfer": "The example is two-dimensional; relate the same shared-filter idea to the one-dimensional HAR signal candidate."
+        },
+        {
+          "id": "9.3",
+          "title": "Adaptive Pooling",
+          "focus": "Change the input length and compare fixed-window pooling with a fixed output size.",
+          "transfer": "Explain what remains fixed before the dense classifier. This is optional architecture practice."
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "title": "Recurrence and attention",
+      "intro": "Choose one activity to explain where sequence order enters a model.",
+      "activities": [
+        {
+          "id": "10.1.2",
+          "title": "RNN Forward",
+          "focus": "Trace one recurrent update, then compare the same inputs in a different order.",
+          "transfer": "Relate the hidden-state trace to time-ordered HAR windows."
+        },
+        {
+          "id": "10.TF",
+          "title": "Transformer Positional Encoding",
+          "focus": "Compare reordered tokens with and without position information.",
+          "transfer": "Use the permutation comparison to explain why a signal-attention candidate needs time-position information."
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "title": "Evaluation and interpretation",
+      "intro": "Choose one activity to support an error analysis you already need for the project.",
+      "activities": [
+        {
+          "id": "11.1",
+          "title": "Choosing the Right Metric",
+          "focus": "Compare accuracy and recall as the decision threshold changes.",
+          "transfer": "All clinical counts are a teaching scenario, not clinical evidence. Transfer the metric trade-off to a HAR confusion matrix."
+        },
+        {
+          "id": "11.GA",
+          "title": "Gradient Attribution",
+          "focus": "Compare a gradient with a feature-removal effect in one supplied toy example.",
+          "transfer": "Explain why an attribution score depends on the method and reference. It is not proof of a causal explanation."
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "title": "Experiment synthesis",
+      "intro": "Reuse your existing curves and results; no new training run is needed.",
+      "activities": [
+        {
+          "id": "11.3",
+          "title": "Learning Curves",
+          "focus": "Use a training/validation pattern to distinguish poor fit from a generalization gap.",
+          "transfer": "Apply one diagnosis to your baseline/candidate comparison and state a limitation. Do not collect new data or exceed the project run budget."
+        }
+      ]
+    }
+  ]
+}

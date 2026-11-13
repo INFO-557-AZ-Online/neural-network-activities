@@ -9,7 +9,7 @@ Lecture and textbook material on things like backprop, regularization, or attent
 - Work through a concrete numeric example (e.g. compute an actual gradient table by hand, then check it)
 - Manipulate a parameter and watch the consequence immediately (e.g. drag a stop-epoch slider and watch train/val loss curves)
 - Get instant right/wrong feedback with a hint, instead of finding out at grading time
-- See a running "✓ Completed" badge per activity, so both the student and instructor can tell what's done
+- Get a practice-completion badge in the open page; it resets on reload and does not send progress or grades to D2L
 
 ## The activities
 
@@ -70,24 +70,34 @@ Lecture and textbook material on things like backprop, regularization, or attent
 On GitHub Pages, each activity is its own page: `docs/activities/<number>.html`, e.g. `docs/activities/6.4.html` opens Linear Regions directly. See [Publishing to GitHub Pages](#publishing-to-github-pages) below.
 
 
-## GitHub Pages
+## Published INFO 557 activities
 
-Neural Networks — Activities
-https://ai-sandbox-ai-healthcare.github.io/neural-network-activities/
+- [Weekly learning route](https://info-557-az-online.github.io/neural-network-activities/course.html): 13 selected activities for the 7.5-week course.
+- [All 38 activities](https://info-557-az-online.github.io/neural-network-activities/).
+- [Example: early stopping](https://info-557-az-online.github.io/neural-network-activities/activities/7.8.html).
 
-Activity 0.0
-https://ai-sandbox-ai-healthcare.github.io/neural-network-activities/activities/0.0.html#0.0
+The weekly route is optional and ungraded. Choose one short practice check within
+the existing study time; no screenshot, extra experiment or submission is needed.
+D2L remains authoritative for assessment instructions and submissions. Week 7.5
+adds no new activity. Edit `course/weekly-activities.json` to maintain the route.
 
-Activity 6.1
-https://ai-sandbox-ai-healthcare.github.io/neural-network-activities/activities/6.1.html#6.1
-
-...
-
-The published pages report anonymous usage (time on task, completion, answers tried, slider changes, clicks) to Google Analytics 4, in the same property as the assignment explorers. Running locally sends nothing. See [ANALYTICS.md](ANALYTICS.md) for the events, setup and the BigQuery report in [`analysis/activities_report.sql`](analysis/activities_report.sql).
+This deployment loads no analytics, requests no student identifier and sends no
+activity responses or progress to a collection service. Badges are practice
+feedback in the current page, not a persistent instructor dashboard. See
+[privacy and progress](ANALYTICS.md) for hosting and math-renderer dependencies.
 
 ## Running locally
 
-**Requirements:** Python 3.
+**Recommended static practice (Python 3, no packages):**
+
+```sh
+python3 -m http.server 8001 --bind 127.0.0.1 --directory docs
+```
+
+Open <http://127.0.0.1:8001/>. This is the same backend-free site used by Pages.
+
+**Legacy development backend:** Python 3. It includes a CSV submission endpoint;
+it is not part of Pages and is not configured as a student-data service.
 
 **Windows (PowerShell):**
 ```
@@ -103,7 +113,7 @@ pip install -r backend/requirements.txt
 python3 -m venv myenv
 source myenv/bin/activate
 pip install -r backend/requirements.txt
-cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+cd backend && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Open **http://localhost:8000** in a browser — this shows the activity list. Click a card, or go directly to `http://localhost:8000/app#<activity-number>` (e.g. `#7.1`).
@@ -150,3 +160,10 @@ served by the documented Python app or used to build the 38 GitHub Pages activit
 Run the build and checks above, and commit both the shared source and regenerated
 `docs/` files. Configure GitHub Pages to publish the `docs/` folder on `main`.
 An individual activity is then available at `activities/<id>.html` below the site URL.
+
+
+The course repository publishes from **main /docs**. `.nojekyll` preserves the
+static output. The `Validate activities` workflow checks generated-source parity,
+the weekly route, privacy boundaries, and numerical regressions on pushes and PRs.
+Pages deployment is managed by GitHub's branch publishing workflow. Check the
+Pages build/deployment result before claiming a new version is live.

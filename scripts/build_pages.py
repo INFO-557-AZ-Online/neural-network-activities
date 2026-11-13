@@ -9,12 +9,14 @@ Reads the single big SPA (backend/static/index.html) and splits it into:
   - docs/activities/<id>.html  (one standalone page per activity)
   - docs/index.html       (landing page linking to every activity)
 
-Every generated page also loads docs/assets/analytics.js (Google Analytics,
-see ANALYTICS.md). That file is hand-maintained; this script never writes it.
+Published pages do not load analytics or the legacy submission API.
+The course route is generated from course/weekly-activities.json.
 
 Re-run this script whenever backend/static/index.html changes.
 """
 import re
+import json
+from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,9 +27,8 @@ KATEX_LINKS = """<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>"""
 
-# Google Analytics (docs/assets/analytics.js, hand-maintained). `defer` runs it
-# after app.js and before each page's DOMContentLoaded bootstrap.
-ANALYTICS_TAG = '<script src="{root}assets/analytics.js" defer></script>'
+# No analytics script is loaded in this course deployment.
+PRACTICE_NOTE = "Practice feedback only. Badges reset on reload and do not update D2L. Follow D2L for graded work."
 
 # ── Activity metadata: (id, prefix-list unused here, title, sub, chapter, init-fn(s), module-group tab ids) ──
 # module-group tab ids: normally just [id]; the 6.2.2 / 6.2.3 pair shares one JS module (initAct4)
@@ -171,18 +172,19 @@ def main():
 <title>{heading} · Neural Networks Activities</title>
 <link rel="stylesheet" href="../assets/app.css">
 {KATEX_LINKS}
-{ANALYTICS_TAG.format(root='../')}
+
 </head>
 <body>
 <header class="app-header">
   <div>
     <h1>{heading}</h1>
-    <p class="header-sub">ISTA 457 / INFO 557 · {sub}</p>
+    <p class="header-sub">INFO 557 · {sub}</p>
   </div>
-  <a href="../index.html" class="btn btn-g" style="text-decoration:none">&larr; All Activities</a>
+  <nav aria-label="Activity navigation"><a href="../course.html" class="btn btn-g">Weekly learning route</a> <a href="../index.html" class="btn btn-g">All activities</a></nav>
 </header>
 <div class="app-body">
-<main class="app-main">
+<main class="app-main" id="main">
+<p class="practice-note">{PRACTICE_NOTE}</p>
 
 {panel_html}
 
@@ -245,16 +247,18 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Neural Networks - Activities · ISTA 457</title>
+<title>INFO 557 · Neural Network Activities</title>
 <style>{landing_css}</style>
-{ANALYTICS_TAG.format(root='')}
+
 </head>
 <body>
 <header class="app-header">
   <h1>Neural Networks — Activities</h1>
-  <p class="header-sub">ISTA 457 / INFO 557 · click an activity to open it</p>
+  <p class="header-sub">INFO 557 · optional, ungraded practice</p>
 </header>
 <main class="app-main">
+<p><a class="route-card" style="display:block;padding:18px;border:2px solid #1d4ed8;border-radius:12px;margin-bottom:20px" href="course.html"><strong>Start with the 7.5-week learning route</strong><br>13 selected activities matched to Weeks 1–7. Choose a short practice check; D2L remains the submission destination.</a></p>
+<p style="margin-bottom:20px">{PRACTICE_NOTE}</p>
 {cards_html}
 </main>
 </body>
@@ -262,7 +266,26 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 """
     (DOCS / "index.html").write_text(landing, encoding="utf-8")
 
-    print(f"Wrote {len(ACTIVITIES)} activity pages, docs/index.html, docs/assets/app.{{css,js}}")
+    route = json.loads((ROOT / "course/weekly-activities.json").read_text())
+    known = {a[0] for a in ACTIVITIES}
+    sections = []
+    for week in route["weeks"]:
+        items = []
+        for activity in week["activities"]:
+            assert activity["id"] in known, activity["id"]
+            items.append(f'<li><h3><a href="activities/{escape(activity["id"])}.html">{escape(activity["id"])} · {escape(activity["title"])}</a></h3><p>{escape(activity["focus"])}</p><p><strong>Connect it:</strong> {escape(activity["transfer"])}</p></li>')
+        sections.append(f'<section id="week-{week["week"]}"><h2>Week {week["week"]} · {escape(week["title"])}</h2><p>{escape(week["intro"])}</p><ul>{"".join(items)}</ul></section>')
+    route_page = f'''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INFO 557 · Weekly activity route</title><link rel="stylesheet" href="assets/app.css">
+<style>.app-main{{max-width:1000px;margin:auto;line-height:1.8}}h2{{margin:28px 0 8px}}h3{{font-size:18px}}li{{margin:16px 0}}ul{{padding-left:24px}}a{{color:#1d4ed8}}.week-nav{{display:flex;flex-wrap:wrap;gap:16px}}</style></head>
+<body><header class="app-header"><div><h1>Weekly activity route</h1><p>{escape(route["course"])}</p></div><a class="btn btn-g" href="index.html">All 38 activities</a></header>
+<main class="app-main"><p class="practice-note">{escape(route["practice_note"])}</p>
+<nav class="week-nav" aria-label="Weekly activities">{"".join(f'<a href="#week-{w["week"]}">Week {w["week"]}</a>' for w in route["weeks"])}</nav>
+{"".join(sections)}<h2>Final half-week</h2><p>No new activity in Week 7.5. Finish the existing project and submit it in D2L.</p>
+<footer><p>{PRACTICE_NOTE}</p></footer></main></body></html>'''
+    (DOCS / "course.html").write_text(route_page, encoding="utf-8")
+    print(f"Wrote {len(ACTIVITIES)} activity pages, catalog, weekly route, and shared assets")
 
 
 if __name__ == "__main__":

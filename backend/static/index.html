@@ -29,7 +29,8 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .katex-display>.katex{max-width:100%}
 .katex-display>.katex>.katex-html{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:6px 2px}
 .tab-panel{display:none}.tab-panel.active{display:block}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.two-col>*{min-width:0}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px}
 .card+.card{margin-top:18px}
 .card-title{font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:16px}
@@ -233,6 +234,15 @@ tr.hi{background:#dbeafe}tr.good{background:#dcfce7}tr.bad{background:#fee2e2}
 .sl-match-sel.bad{border-color:var(--red)!important;background:#fee2e2}
 .sl-takeaway{background:linear-gradient(135deg,#eef2ff,#ede9ff);border:2px solid #a5b4fc!important}
 .sl-takeaway li{margin-bottom:10px;line-height:1.7;font-size:14.5px}
+
+/* Keep charts and calculation tables usable on narrow activity pages. */
+.practice-note{background:#eef4f8;border-left:4px solid #1b4f72;padding:14px 18px;margin-bottom:20px;font-size:15px}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #1d4ed8;outline-offset:3px}
+input[type=range]{min-width:0}
+svg{max-width:100%}
+.prob-card{min-width:0;overflow-x:auto}
+.bp-principles>*{min-width:0}
+@media(max-width:900px){.bp-principles{grid-template-columns:minmax(0,1fr)!important}.two-col{grid-template-columns:minmax(0,1fr)}.app-header{flex-wrap:wrap}.app-header nav{display:flex;flex-wrap:wrap;gap:8px}.app-main{padding:20px 16px}.card{min-width:0;overflow-x:auto}.locked-grid{grid-template-columns:minmax(0,1fr)}.app-header{padding:16px}.prob-title{font-size:18px}.slider-row{min-width:0}.sidebar{width:156px}}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -1301,7 +1311,7 @@ tr.hi{background:#dbeafe}tr.good{background:#dcfce7}tr.bad{background:#fee2e2}
       <span id="bp-completed" class="completed-badge">✓ 6.5.2 Completed</span>
     </div>
     <p class="prob-desc">Given the <code>build_grad</code> algorithm and the computational graph below, complete the gradient table for <code>build_grad(u<sup>(1)</sup>, G, G′, {u<sup>(6)</sup>=1})</code>.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div class="two-col" style="gap:20px">
       <!-- Algorithm -->
       <div>
         <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Algorithm</div>
@@ -1369,7 +1379,7 @@ tr.hi{background:#dbeafe}tr.good{background:#dcfce7}tr.bad{background:#fee2e2}
       <div class="card-title" style="margin-bottom:0">Why <code>build_grad</code>?</div>
       <span class="badge bg">Step 1 of 3</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+    <div class="bp-principles" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px">
       <div style="background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:14px">
         <div style="font-size:13.5px;font-weight:800;color:#c2610c;margin-bottom:8px">⚡ One backward pass</div>
         <div style="font-size:14.5px;color:var(--muted);line-height:1.8">Computing all gradients ∂L/∂uⁱ at once is no more expensive than a single forward pass — O(edges) total work.</div>

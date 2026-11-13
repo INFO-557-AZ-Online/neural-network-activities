@@ -228,3 +228,25 @@ test('early-stopping loss paths stay inside the plotted axes',()=>{
     assert.ok(+x>=44&&+x<=448);assert.ok(+y>=14&&+y<=168,`curve exceeds plot: ${y}`);
   }
 });
+
+
+test('course route links 13 known activities in seven weeks without new final-week work',()=>{
+  const route=JSON.parse(fs.readFileSync(path.join(root,'course/weekly-activities.json'),'utf8'));
+  assert.deepEqual(route.weeks.map(w=>w.week),[1,2,3,4,5,6,7]);
+  const activities=route.weeks.flatMap(w=>w.activities);
+  assert.equal(activities.length,13);
+  assert.equal(new Set(activities.map(a=>a.id)).size,13);
+  const html=fs.readFileSync(path.join(root,'docs/course.html'),'utf8');
+  for(const a of activities){assert.ok(fs.existsSync(path.join(root,`docs/activities/${a.id}.html`)));assert.ok(html.includes(`activities/${a.id}.html`));}
+  assert.ok(html.includes('No new activity in Week 7.5'));
+  assert.ok(html.includes('Optional and ungraded'));
+});
+
+test('Pages does not load analytics, collect identifiers, submit, or persist completion',()=>{
+  for(const name of ['index.html','course.html',...fs.readdirSync(path.join(root,'docs/activities')).map(x=>'activities/'+x)]){
+    const html=fs.readFileSync(path.join(root,'docs',name),'utf8');
+    assert.ok(!/analytics\.js|googletagmanager|google-analytics|student_id|\/api\/submit|submitWork\(/.test(html),name);
+  }
+  assert.ok(!/\/api\/submit|async function submitWork|sessionStorage\.setItem/.test(source));
+  assert.ok(!/measurementId:|fetch\(|gtag\(/.test(fs.readFileSync(path.join(root,'docs/assets/analytics.js'),'utf8')));
+});

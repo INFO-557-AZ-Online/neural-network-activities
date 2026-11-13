@@ -1,0 +1,13 @@
+name: Validate activities
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check generated pages and course route
+        run: python3 scripts/check_pages.py
+      - name: Check calculations and publication boundaries
+        run: node --test tests/activities.test.cjs

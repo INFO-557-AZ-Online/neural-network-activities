@@ -8,18 +8,19 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-<script src="../assets/analytics.js" defer></script>
+
 </head>
 <body>
 <header class="app-header">
   <div>
     <h1>Backprop Table</h1>
-    <p class="header-sub">ISTA 457 / INFO 557 · build_grad step-by-step</p>
+    <p class="header-sub">INFO 557 · build_grad step-by-step</p>
   </div>
-  <a href="../index.html" class="btn btn-g" style="text-decoration:none">&larr; All Activities</a>
+  <nav aria-label="Activity navigation"><a href="../course.html" class="btn btn-g">Weekly learning route</a> <a href="../index.html" class="btn btn-g">All activities</a></nav>
 </header>
 <div class="app-body">
-<main class="app-main">
+<main class="app-main" id="main">
+<p class="practice-note">Practice feedback only. Badges reset on reload and do not update D2L. Follow D2L for graded work.</p>
 
 <div id="tab-6.5.2" class="tab-panel">
 
@@ -30,7 +31,7 @@
       <span id="bp-completed" class="completed-badge">✓ 6.5.2 Completed</span>
     </div>
     <p class="prob-desc">Given the <code>build_grad</code> algorithm and the computational graph below, complete the gradient table for <code>build_grad(u<sup>(1)</sup>, G, G′, {u<sup>(6)</sup>=1})</code>.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div class="two-col" style="gap:20px">
       <!-- Algorithm -->
       <div>
         <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Algorithm</div>
@@ -98,7 +99,7 @@
       <div class="card-title" style="margin-bottom:0">Why <code>build_grad</code>?</div>
       <span class="badge bg">Step 1 of 3</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+    <div class="bp-principles" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px">
       <div style="background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:14px">
         <div style="font-size:13.5px;font-weight:800;color:#c2610c;margin-bottom:8px">⚡ One backward pass</div>
         <div style="font-size:14.5px;color:var(--muted);line-height:1.8">Computing all gradients ∂L/∂uⁱ at once is no more expensive than a single forward pass — O(edges) total work.</div>
