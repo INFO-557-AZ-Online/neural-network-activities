@@ -4721,10 +4721,10 @@ function makeSlider(container, id, label, value, min, max, step, onchange, extra
   d.className = 'slider-row'
   d.innerHTML = `
     <span class="slider-label">
-      <span class="name">${label}</span>
+      <span class="name" id="${id}-name">${label}</span>
       <span class="val" id="${id}-val">${fmt(value)}</span>
     </span>
-    <input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${value}"
+    <input type="range" id="${id}" aria-labelledby="${id}-name" min="${min}" max="${max}" step="${step}" value="${value}"
       class="${extraClass}" style="flex:1">`
   container.appendChild(d)
   d.querySelector('input').addEventListener('input', e => {
